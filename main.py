@@ -11,13 +11,27 @@ import sys
 ENTRY = "Meetingfluencer"
 
 
+def validate_length(text: str) -> None:
+    """Gate: the word is 1-30 characters."""
+    if not isinstance(text, str):
+        raise ValueError("entry must be text")
+    if not 1 <= len(text) <= 30:
+        raise ValueError(f"entry is {len(text)} characters, must be 1-30")
+
+
+def validate_single_word(text: str) -> None:
+    """Gate: exactly one word, no whitespace of any kind."""
+    if len(text.split()) != 1:
+        raise ValueError("entry must be a single word")
+    if any(ch.isspace() for ch in text):
+        raise ValueError("entry must not contain whitespace")
+
+
 def validate_entry(text: str) -> None:
     """Fail loudly if the word breaks the bounty gate (one word,
     1-30 characters, no whitespace) instead of submitting a bad entry."""
-    if not 1 <= len(text) <= 30:
-        raise ValueError(f"entry is {len(text)} characters, must be 1-30")
-    if len(text.split()) != 1:
-        raise ValueError("entry must be a single word")
+    validate_length(text)
+    validate_single_word(text)
 
 
 def main() -> int:
